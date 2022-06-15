@@ -1,40 +1,29 @@
-# Scala and sbt Dockerfile
+# Scala, sbt and Docker Enngine Dockerfile
 
-This repository contains **Dockerfile** of [Scala](http://www.scala-lang.org) and [sbt](http://www.scala-sbt.org).
+Based on [sbt/docker-sbt](https://github.com/sbt/docker-sbt).
 
+This repository contains **Dockerfile** of [Scala](http://www.scala-lang.org), [sbt](http://www.scala-sbt.org) and a Docker Engine.
+Basically, a [sbt/docker-sbt](https://github.com/sbt/docker-sbt) plus `docker-cli` and `docker-compose`.
 
 ## DockerHub
 
 As we think referencing unstable versions is a bad idea we don't publish a `latest` tag
 
-For a list of all available tags see https://hub.docker.com/r/sbtscala/scala-sbt/tags
-
-Older tags are available at: https://hub.docker.com/r/hseeberger/scala-sbt/tags
+For a list of all available tags see https://hub.docker.com/repository/docker/kamilkloch/scala-sbt-docker/tags
 
 ## Base Docker Image ##
 
-* [openjdk](https://hub.docker.com/_/openjdk)
+* [eclipse-temurin](https://hub.docker.com/_/eclipse-temurin)
 
 
 ## Installation ##
 
 1. Install [Docker](https://www.docker.com)
-2. Pull [automated build](https://hub.docker.com/r/sbtscala/scala-sbt/) from public [Docker Hub Registry](https://registry.hub.docker.com):
+2. Pull the [image](https://hub.docker.com/repository/docker/kamilkloch/scala-sbt-docker) from public [Docker Hub Registry](https://registry.hub.docker.com):
 ```
-docker pull sbtscala/scala-sbt:17.0.2_1.6.2_3.1.2
+docker pull kamilkloch/scala-sbt-docker:eclipse-temurin-17.0.2_1.6.2_2.13.8_20.10.16
 ```
-Alternatively, you can build an image from Dockerfile:
-(debian):
-```
-docker build \
-  --build-arg BASE_IMAGE_TAG="17.0.2-jdk-bullseye" \
-  --build-arg SBT_VERSION="1.6.2" \
-  --build-arg SCALA_VERSION="2.13.8" \
-  --build-arg USER_ID=1001 \
-  --build-arg GROUP_ID=1001 \
-  -t sbtscala/scala-sbt \
-  github.com/sbt/docker-sbt.git#:debian
-```
+
 
 ## Usage ##
 
@@ -42,23 +31,33 @@ docker build \
 docker run -it --rm sbtscala/scala-sbt:17.0.2_1.6.2_3.1.2
 ```
 
-### Alternative commands ###
-The container contains `bash`, `scala` and `sbt`.
+Alternatively, you can bulid an image from Dockerfile:
 
 ```
-docker run -it --rm sbtscala/scala-sbt:17.0.2_1.6.2_3.1.2 scala
+docker build \
+  --build-arg BASE_IMAGE_TAG="17.0.2_8-jdk-focal" \
+  --build-arg SBT_VERSION="1.6.2" \
+  --build-arg SCALA_VERSION="2.13.8" \
+  --build-arg DOCKER_VERSION="5:20.10.16~3-0~ubuntu-focal" \
+  --build-arg USER_ID=1001 \
+  --build-arg GROUP_ID=1001 \
+  -t kamilkloch/scala-sbt-docker:eclipse-temurin-17.0.2_1.6.2_2.13.8_20.10.16 .
+```
+
+
+### Alternative commands ###
+The container contains `bash`, `scala`, `sbt`, `docker` and `docker compose`.
+
+```
+docker run -it --rm kamilkloch/scala-sbt-docker:eclipse-temurin-17.0.2_1.6.2_2.13.8_20.10.16 scala
 ```
 
 ### Non-root ###
 The container is prepared to be used with a non-root user called `sbtuser`
 
 ```
-docker run -it --rm -u sbtuser -w /home/sbtuser sbtscala/scala-sbt:17.0.2_1.6.2_3.1.2
+docker run -it --rm -u sbtuser -w /home/sbtuser kamilkloch/scala-sbt-docker:eclipse-temurin-17.0.2_1.6.2_2.13.8_20.10.16
 ```
-
-## Contribution policy ##
-
-Contributions via GitHub pull requests are gladly accepted from their original author. Along with any pull requests, please state that the contribution is your original work and that you license the work to the project under the project's open source license. Whether or not you state this explicitly, by submitting any copyrighted material via pull request, email, or other means you agree to license the material under the project's open source license and warrant that you have the legal authority to do so.
 
 
 ## License ##

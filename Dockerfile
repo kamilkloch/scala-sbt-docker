@@ -1,18 +1,20 @@
 #
-# Scala and sbt Dockerfile
+# Scala, sbt and docker engine Dockerfile
 #
-# https://github.com/sbt/docker-sbt
+# https://github.com/kamilkloch/scala-sbt-docker
 #
 
 # Pull base image
 ARG BASE_IMAGE_TAG
-FROM eclipse-temurin:${BASE_IMAGE_TAG:-11.0.14.1_1-jdk}
+FROM eclipse-temurin:${BASE_IMAGE_TAG:-17.0.2_8-jdk-focal}
 
 # Env variables
 ARG SCALA_VERSION
 ENV SCALA_VERSION ${SCALA_VERSION:-2.13.8}
 ARG SBT_VERSION
 ENV SBT_VERSION ${SBT_VERSION:-1.6.2}
+ARG DOCKER_VERSION
+ENV DOCKER_VERSION ${DOCKER_VERSION:-5:20.10.16~3-0~ubuntu-focal}
 ARG USER_ID
 ENV USER_ID ${USER_ID:-1001}
 ARG GROUP_ID 
@@ -46,7 +48,18 @@ RUN \
 RUN \
   apt-get update && \
   apt-get install git -y && \
-  apt-get install rpm -y && \
+  apt-get install rpm -y
+
+# Install docker
+RUN \
+  apt-get install -y ca-certificates gnupg && \
+  mkdir -p /etc/apt/keyrings && \
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+  echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  focal stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+  apt-get update && \
+  apt-get -y install docker-ce=$DOCKER_VERSION docker-ce-cli=$DOCKER_VERSION containerd.io docker-compose-plugin && \
   rm -rf /var/lib/apt/lists/*
 
 # Symlink java to have it available on sbtuser's PATH

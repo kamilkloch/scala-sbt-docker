@@ -1,32 +1,23 @@
-# Scala, sbt and Docker Enngine Dockerfile
-
+# Scala, sbt and Docker Engine Dockerfile
 Based on [sbt/docker-sbt](https://github.com/sbt/docker-sbt).
 
 This repository contains **Dockerfile** of [Scala](http://www.scala-lang.org), [sbt](http://www.scala-sbt.org) and a Docker Engine.
 Basically, a [sbt/docker-sbt](https://github.com/sbt/docker-sbt) plus `docker-cli` and `docker-compose`.
 
 ## DockerHub
-
-As we think referencing unstable versions is a bad idea we don't publish a `latest` tag
-
 For a list of all available tags see https://hub.docker.com/repository/docker/kamilkloch/scala-sbt-docker/tags
 
 ## Base Docker Image ##
-
 * [eclipse-temurin](https://hub.docker.com/_/eclipse-temurin)
 
-
 ## Installation ##
-
 1. Install [Docker](https://www.docker.com)
 2. Pull the [image](https://hub.docker.com/repository/docker/kamilkloch/scala-sbt-docker) from public [Docker Hub Registry](https://registry.hub.docker.com):
 ```
 docker pull kamilkloch/scala-sbt-docker:eclipse-temurin-17.0.2_1.6.2_2.13.8_20.10.16
 ```
 
-
 ## Usage ##
-
 ```
 docker run -it --rm sbtscala/scala-sbt:17.0.2_1.6.2_3.1.2
 ```
@@ -44,7 +35,6 @@ docker build \
   -t kamilkloch/scala-sbt-docker:eclipse-temurin-17.0.2_1.6.2_2.13.8_20.10.16 .
 ```
 
-
 ### Alternative commands ###
 The container contains `bash`, `scala`, `sbt`, `docker` and `docker compose`.
 
@@ -58,7 +48,6 @@ The container is prepared to be used with a non-root user called `sbtuser`
 ```
 docker run -it --rm -u sbtuser -w /home/sbtuser kamilkloch/scala-sbt-docker:eclipse-temurin-17.0.2_1.6.2_2.13.8_20.10.16
 ```
-
 
 ## License ##
 

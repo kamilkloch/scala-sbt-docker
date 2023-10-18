@@ -6,15 +6,15 @@
 
 # Pull base image
 ARG BASE_IMAGE_TAG
-FROM eclipse-temurin:${BASE_IMAGE_TAG:-17.0.3_7-jdk-focal}
+FROM eclipse-temurin:${BASE_IMAGE_TAG:-21_35-jdk-jammy}
 
 # Env variables
 ARG SCALA_VERSION
-ENV SCALA_VERSION ${SCALA_VERSION:-2.13.8}
+ENV SCALA_VERSION ${SCALA_VERSION:-2.13.12}
 ARG SBT_VERSION
-ENV SBT_VERSION ${SBT_VERSION:-1.7.0}
+ENV SBT_VERSION ${SBT_VERSION:-1.9.6}
 ARG DOCKER_VERSION
-ENV DOCKER_VERSION ${DOCKER_VERSION:-5:20.10.16~3-0~ubuntu-focal}
+ENV DOCKER_VERSION ${DOCKER_VERSION:-5:24.0.6-1~ubuntu.22.04~jammy}
 ARG USER_ID
 ENV USER_ID ${USER_ID:-1001}
 ARG GROUP_ID 
@@ -57,7 +57,7 @@ RUN \
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
   echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  focal stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
   apt-get update && \
   apt-get -y install docker-ce=$DOCKER_VERSION docker-ce-cli=$DOCKER_VERSION containerd.io docker-compose-plugin && \
   rm -rf /var/lib/apt/lists/*
